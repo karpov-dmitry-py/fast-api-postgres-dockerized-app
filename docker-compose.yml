@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - ${APP_EXPOSED_PORT}:8000
+    restart: on-failure
+    depends_on:
+      - db
+  db:
+    image: postgres:14-alpine
+    restart: on-failure
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${DB_EXPOSED_PORT}:5432
+    volumes:
+      - pg:/var/lib/postgresql
+
+volumes:
+  pg:
+    driver: local
+
